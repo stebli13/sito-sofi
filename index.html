@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invito Speciale per Sofi ✨ | Sabato Sera</title>
+  <meta name="description" content="Un invito speciale per una cena indimenticabile questo sabato sera.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Caveat:wght@600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Background Canvas for floating hearts & sparkles -->
+  <canvas id="ambient-canvas"></canvas>
+
+  <div class="app-container">
+    <!-- STAGE 1: The Question -->
+    <div id="stage-invitation" class="card active">
+      <div class="badge-pill">
+        <span class="sparkle">✨</span> Messaggio importante per Sofi <span class="sparkle">✨</span>
+      </div>
+
+      <div class="hero-image-wrapper">
+        <img src="date_illustration.jpg" alt="Noi a cena questo sabato" class="hero-image" id="hero-img">
+        <div class="glow-ring"></div>
+        <div class="reaction-bubble" id="reaction-bubble">Psst... ho una domanda! 🫣</div>
+      </div>
+
+      <h1 class="main-title">
+        Ti andrebbe di andare a <br><span class="highlight-text">cena fuori</span> sabato sera? 🍷✨
+      </h1>
+
+      <p class="subtitle">
+        C'è solo una risposta giusta... ma sei libera di provare a cliccare "No" 😉
+      </p>
+
+      <!-- Escape No Counter Toast -->
+      <div id="tease-toast" class="tease-toast hidden"></div>
+
+      <!-- Action Buttons Area -->
+      <div class="buttons-container" id="buttons-area">
+        <button id="btn-yes" class="btn btn-yes" type="button">
+          <span class="btn-icon">🥰</span>
+          <span class="btn-text">Sì, assolutamente!</span>
+        </button>
+
+        <button id="btn-no" class="btn btn-no" type="button">
+          <span class="btn-icon">🙃</span>
+          <span class="btn-text">No...</span>
+        </button>
+      </div>
+
+      <div class="footer-note">
+        <span class="heart-pulse">❤️</span> Prometto buon cibo, risate e una serata speciale.
+      </div>
+    </div>
+
+    <!-- STAGE 2: Details & Availability (Hours & Preferences) -->
+    <div id="stage-details" class="card hidden">
+      <div class="badge-pill celebration-badge">
+        🎉 Evviva! Sapevo che avresti detto di sì! 🥰
+      </div>
+
+      <h2 class="section-title">
+        Organizziamo il nostro <span class="highlight-text">Sabato Sera</span> 🍽️🥂
+      </h2>
+      <p class="section-subtitle">
+        Ora tocca a te: a che ora saresti disponibile e cosa ti andrebbe?
+      </p>
+
+      <form id="date-details-form" onsubmit="return false;">
+        <!-- Time Picker Section -->
+        <div class="form-section">
+          <label class="section-label">
+            <span class="label-icon">⏰</span> A che ora ci vediamo?
+          </label>
+          <div class="chips-grid" id="time-chips">
+            <button type="button" class="chip" data-time="19:30">19:30</button>
+            <button type="button" class="chip active" data-time="20:00">20:00 🌟</button>
+            <button type="button" class="chip" data-time="20:30">20:30</button>
+            <button type="button" class="chip" data-time="21:00">21:00</button>
+            <button type="button" class="chip" data-time="custom">Altro orario...</button>
+          </div>
+
+          <!-- Custom Time Input (shown when selected) -->
+          <div id="custom-time-wrapper" class="custom-input-wrapper hidden">
+            <label for="custom-time-input" class="custom-label">Scegli l'orario perfetto per te:</label>
+            <input type="time" id="custom-time-input" value="20:15" class="custom-time-control">
+          </div>
+        </div>
+
+        <!-- Food / Vibe Preference Section -->
+        <div class="form-section">
+          <label class="section-label">
+            <span class="label-icon">🍽️</span> Cosa ti andrebbe di mangiare?
+          </label>
+          <div class="vibe-grid">
+            <label class="vibe-card selected">
+              <input type="radio" name="food_choice" value="Sushi 🍣" checked>
+              <span class="vibe-emoji">🍣</span>
+              <span class="vibe-title">Sushi</span>
+              <span class="vibe-desc">Bacchette e chiacchiere</span>
+            </label>
+
+            <label class="vibe-card">
+              <input type="radio" name="food_choice" value="Pizza 🍕">
+              <span class="vibe-emoji">🍕</span>
+              <span class="vibe-title">Pizza</span>
+              <span class="vibe-desc">Super comfort e dolce</span>
+            </label>
+
+            <label class="vibe-card">
+              <input type="radio" name="food_choice" value="Cena a Lume di Candela 🍷">
+              <span class="vibe-emoji">🍷</span>
+              <span class="vibe-title">Lume di Candela</span>
+              <span class="vibe-desc">Vino buono & atmosfera romantica</span>
+            </label>
+
+            <label class="vibe-card">
+              <input type="radio" name="food_choice" value="Fai tu! Mi fido di te ✨">
+              <span class="vibe-emoji">✨</span>
+              <span class="vibe-title">Sorprendimi!</span>
+              <span class="vibe-desc">Scelta a sorpresa di Stefano</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Pickup Preference -->
+        <div class="form-section">
+          <label class="section-label">
+            <span class="label-icon">🚗</span> Passaggio
+          </label>
+          <div class="toggle-group">
+            <label class="toggle-option active">
+              <input type="radio" name="ride_choice"
+                value="Passo a prenderti io sotto casa (autista privato a 5 stelle 🚗✨)" checked>
+              <span>Passo a prenderti io sotto casa (autista privato a 5 stelle 🚗✨)</span>
+            </label>
+            <label class="toggle-option">
+              <input type="radio" name="ride_choice"
+                value="Passo a prenderti io... ma la musica in macchina la scelgo io 🎶😎">
+              <span>Passo a prenderti io... ma la musica in macchina la scelgo io 🎶😎</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Optional Special Requests / Notes -->
+        <div class="form-section">
+          <label for="special-notes" class="section-label">
+            <span class="label-icon">💌</span> Desiderio speciale o posto che vorresti provare? (opzionale)
+          </label>
+          <textarea id="special-notes" rows="2"
+            placeholder="Es: 'Voglio assolutamente un dolce al cioccolato!' oppure 'Ho voglia di scopare...'"></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <button id="btn-confirm" class="btn btn-confirm" type="button">
+          <span>Conferma il nostro appuntamento! 🥂✨</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- STAGE 3: Final Confirmation & Ticket -->
+    <div id="stage-ticket" class="card hidden">
+      <div class="success-icon-wrap">
+        <div class="success-ring"></div>
+        <span class="success-icon">🥂</span>
+      </div>
+
+      <h2 class="ticket-headline">È Ufficiale! Abbiamo un Appuntamento! ❤️</h2>
+      <p class="ticket-sub">Ecco il tuo promemoria esclusivo per questo sabato sera:</p>
+
+      <div class="ticket-card" id="date-ticket">
+        <div class="ticket-header">
+          <div class="ticket-logo">SPECIAL DATE PASS 🎫</div>
+          <div class="ticket-date-tag">QUESTO SABATO</div>
+        </div>
+        <div class="ticket-divider">
+          <div class="circle-notch left"></div>
+          <div class="dash-line"></div>
+          <div class="circle-notch right"></div>
+        </div>
+        <div class="ticket-body">
+          <div class="ticket-row">
+            <span class="t-label">Invitata Speciale</span>
+            <span class="t-value" id="t-guest">Sofi ❤️</span>
+          </div>
+          <div class="ticket-row">
+            <span class="t-label">Accompagnatore</span>
+            <span class="t-value">Stefano (il ragazzo più bello del mondo)</span>
+          </div>
+          <div class="ticket-row">
+            <span class="t-label">Orario d'Incontro</span>
+            <span class="t-value highlight" id="t-time">Ore 20:00</span>
+          </div>
+          <div class="ticket-row">
+            <span class="t-label">Stile della Cena</span>
+            <span class="t-value" id="t-food">Sushi 🍣</span>
+          </div>
+          <div class="ticket-row">
+            <span class="t-label">Trasporto</span>
+            <span class="t-value" id="t-ride">Passo a prenderti io 🚗</span>
+          </div>
+          <div class="ticket-row" id="t-notes-row" style="display: none;">
+            <span class="t-label">Nota Speciale</span>
+            <span class="t-value" id="t-notes">-</span>
+          </div>
+        </div>
+        <div class="ticket-footer">
+          <span>Codice per scopare: #SOFI-E-STE-100%</span>
+        </div>
+      </div>
+
+      <div class="ticket-actions">
+        <div class="ticket-success-pill">
+          ✨ Risposta registrata! Preparati per sabato sera! 🥰 ✨
+        </div>
+        <button id="btn-screenshot" class="btn btn-secondary" type="button" onclick="window.print()">
+          📸 Salva o Stampa il Promemoria
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
